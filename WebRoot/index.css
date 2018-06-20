@@ -1,0 +1,36 @@
+@CHARSET "UTF-8";
+
+.book {
+	float:left;
+	margin:20px;
+}
+
+a {
+	text-decoration: none;
+}
+a:VISITED {
+	color:#0000ff;
+}
+a:hover {
+	color:#000;
+}
+#bodydiv {
+	width:1500px;
+}
+
+#button1 {
+	width:40px;
+	height:40px;
+	margin-top:0px;
+	border:0px;
+	margin-left:0px;
+	background:url(images/shou.jpg) no-repeat;
+}
+
+#button1:hover {
+	background-size:cover;
+}
+
+.dis_none {
+	display:none;
+}
