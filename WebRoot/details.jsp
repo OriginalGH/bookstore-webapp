@@ -1,6 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8" contentType="text/html; charset=utf-8"%>
 <%@ page import="com.mypack.model.ItemModel" %>
 <%@ page import="com.mypack.dao.ItemsDAO" %>
+<%@ page import="java.text.DecimalFormat" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -47,6 +48,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
+  <div id="bodydiv">
   <img src="images/booklogo.jpg" width="180" height="120" border="5" style="border-color:#D3D3D3 gray gray #D3D3D3">
   <div class="logo">
   <center><form action="Controller" method="post"><input type="hidden" name="action" value="search"/><input 
@@ -77,6 +79,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      		<%
     			ItemsDAO itemsDao = new ItemsDAO();
     			ItemModel item = itemsDao.getItemsById(Integer.parseInt(request.getParameter("id")));
+    			DecimalFormat priceDF = new DecimalFormat();
+    			priceDF.applyPattern(".00");
     			if(item!=null){
      		%>
         <td width="75%" valign="top">
@@ -91,9 +95,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      		
      	    	<h2><%=item.getName() %></h2>
      			&nbsp;<br>
-            	<b style="color:red;">价格 ¥:<%=item.getPrice() %></b><br>
+            	<b>价格：<%=priceDF.format(item.getPrice()) %></b><br>
             	&nbsp;<br>
-     			<b>库存：<%=item.getCount() %></b><br>
+     			<b>库存：<%=item.getCount() %> 本</b><br>
      			&nbsp;<br>
      			<b>出版社：<%=item.getCity() %></b><br>
      			&nbsp;<br>
@@ -119,7 +123,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	     			<img src="images/<%=item2.getPicture() %>" width="86" height="70" border="0">
 	     			</a>
 	     			<p>&nbsp;<%=item2.getName() %></p>
-	     			<P style="color:red;">&nbsp;¥:&nbsp;<%=item2.getPrice() %></P>
+	     			<P style="color:red;">&nbsp;¥:&nbsp;<%=priceDF.format(item2.getPrice()) %></P>
 	     			<br>
      		</div>
      		<%
@@ -178,7 +182,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      		 	<div>
      		 		<a href="details.jsp?id=<%=i.getId()%>"><img src="images/<%=i.getPicture() %>" width="120" height="80" border="0"></a>
 	     			<h3><%=i.getName() %></h3>
-	     			<p>出版社:<%=i.getCity() %>&nbsp;&nbsp;¥:<%=i.getPrice() %></p>
+	     			<p><%=i.getCity() %>&nbsp;&nbsp;&nbsp;¥:<%=priceDF.format(i.getPrice()) %></p>
 	     			<br>
      		 	</div>
      		 	<% 
@@ -200,5 +204,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      <script type="text/javascript">
      </script>
       -->
+      
+  </div>
   </body>
 </html>

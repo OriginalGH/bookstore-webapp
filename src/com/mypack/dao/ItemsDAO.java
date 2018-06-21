@@ -30,7 +30,7 @@ public class ItemsDAO {
 				item.setName(rs.getString("name"));
 				item.setCity(rs.getString("city"));
 				item.setCount(rs.getInt("count"));
-				item.setPrice(rs.getInt("price"));
+				item.setPrice(rs.getFloat("price"));
 				item.setPicture(rs.getString("picture"));
 				list.add(item);
 

@@ -30,9 +30,9 @@ public class ControllerServlet extends HttpServlet {
 		response.setCharacterEncoding("utf-8"); // 指定对服务器响应进行重新编码所使用的编码。
 
 		response.setContentType("text/html");
-		// PrintWriter out = response.getWriter();
-
-		// System.out.println(this.con); // 输出数据库连接信息
+//		PrintWriter out = response.getWriter();
+//
+//		System.out.println(this.con); // 输出数据库连接信息
 
 		String action = request.getParameter("action");
 		UserModel model = new UserModel();
@@ -131,8 +131,8 @@ public class ControllerServlet extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
 
-		// response.setContentType("text/html");
-		// PrintWriter out = response.getWriter();
+//		response.setContentType("text/html");
+//		PrintWriter out = response.getWriter();
 		doGet(request, response);
 
 	}
@@ -142,18 +142,18 @@ public class ControllerServlet extends HttpServlet {
 		// 从web.xml获取context-parameter配置信息
 
 		/*
-		 * ServletContext context = getServletConfig().getServletContext();
-		 * String driver = context.getInitParameter("driver"); String url =
-		 * context.getInitParameter("url"); String username =
-		 * context.getInitParameter("username"); String password =
-		 * context.getInitParameter("password");
-		 */
+		ServletContext context = getServletConfig().getServletContext();
+		String driver = context.getInitParameter("driver"); 
+		String url = context.getInitParameter("url"); 
+		String username = context.getInitParameter("username"); 
+		String password = context.getInitParameter("password");
+		*/ 
 
 		try {
-			// Class.forName(driver);
-			// con = (Connection)
-			// DriverManager.getConnection(url,username,password);
-			
+			/*
+			Class.forName(driver);
+			con = DriverManager.getConnection(url,username,password);
+			*/
 			con = C3P0Inner.getConnection();
 			System.out.println("ControllerServlet init be called.");
 		} catch (Exception e) {

@@ -1,6 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8" contentType="text/html; charset=utf-8"%>
 <%@ page import="com.mypack.model.ItemModel" %>
 <%@ page import="com.mypack.dao.ItemsDAO" %>
+<%@ page import="java.text.DecimalFormat" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -66,8 +67,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <br>
   <center>
   <div class="fenlei">
-  <button id="class1" style="color:black;"><b>个性推荐</b></button>&nbsp;&nbsp;&nbsp;&nbsp;
-  <button id="class2" style="color:blue;"><b>热销图书</b></button>&nbsp;&nbsp;&nbsp;&nbsp;
+  <button id="class1" style="color:black;"><b>每日推荐</b></button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <button id="class2" style="color:blue;"><b>热销图书</b></button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   <button id="class3" style="color:blue;"><b>新品推荐</b></button>
   </div>
   </center>
@@ -80,6 +81,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      		<%
     			ItemsDAO itemsDao = new ItemsDAO();
     			ArrayList<ItemModel> list = itemsDao.getAllItems();
+    			DecimalFormat priceDF = new DecimalFormat();
+    			priceDF.applyPattern(".00");
     			if(list!=null&&list.size()>0){
     				for(int i=0;i<list.size();i++)
     				{
@@ -90,7 +93,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	     			<img src="images/<%=item.getPicture() %>" width="210" height="180" border="0">
 	     			</a>
 	     			<h4>&nbsp;&nbsp;&nbsp;&nbsp;<%=item.getName() %></h4>
-	     			<P style="color:red;">&nbsp;&nbsp;&nbsp;&nbsp;¥:&nbsp;<%=item.getPrice() %></P>
+	     			<P style="color:red;">&nbsp;&nbsp;&nbsp;&nbsp;¥:&nbsp;<%=priceDF.format(item.getPrice()) %></P>
 	     			<p>&nbsp;&nbsp;&nbsp;&nbsp;出版社：<%=item.getCity() %></p>
 	     			<br>
      		</div>
@@ -116,7 +119,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	     			<img src="images/<%=item.getPicture() %>" width="210" height="180" border="0">
 	     			</a>
 	     			<h4>&nbsp;&nbsp;&nbsp;&nbsp;<%=item.getName() %></h4>
-	     			<P style="color:red;">&nbsp;&nbsp;&nbsp;&nbsp;¥:&nbsp;<%=item.getPrice() %></P>
+	     			<P style="color:red;">&nbsp;&nbsp;&nbsp;&nbsp;¥:&nbsp;<%=priceDF.format(item.getPrice()) %></P>
 	     			<p>&nbsp;&nbsp;&nbsp;&nbsp;出版社：<%=item.getCity() %></p>
 	     			<br>
      		</div>
@@ -142,7 +145,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	     			<img src="images/<%=item.getPicture() %>" width="210" height="180" border="0">
 	     			</a>
 	     			<h4>&nbsp;&nbsp;&nbsp;&nbsp;<%=item.getName() %></h4>
-	     			<P style="color:red;">&nbsp;&nbsp;&nbsp;&nbsp;¥:&nbsp;<%=item.getPrice() %></P>
+	     			<P style="color:red;">&nbsp;&nbsp;&nbsp;&nbsp;¥:&nbsp;<%=priceDF.format(item.getPrice()) %></P>
 	     			<p>&nbsp;&nbsp;&nbsp;&nbsp;出版社：<%=item.getCity() %></p>
 	     			<br>
      		</div>
@@ -169,21 +172,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	console.log("1");
   	$("#class2, #class3").attr("style","color:blue;");
   	$("#class1").attr("style","color:black;");
-  	$("#table2, #table3").hide(500);
+  	$("#table2, #table3").fadeOut(300);
   	$("#table1").fadeIn(500);
   };
   document.getElementById("class2").onclick = function(){
   	console.log("2");
   	$("#class1, #class3").attr("style","color:blue;");
   	$("#class2").attr("style","color:black;");
-  	$("#table1, #table3").hide(500);
+  	$("#table1, #table3").fadeOut(300);
   	$("#table2").fadeIn(500);
   };
   document.getElementById("class3").onclick = function(){
   	console.log("3");
   	$("#class1,#class2").attr("style","color:blue;");
   	$("#class3").attr("style","color:black;");
-  	$("#table1,#table2").hide(500);
+  	$("#table1,#table2").fadeOut(300);
   	$("#table3").fadeIn(500);
   };
   </script>

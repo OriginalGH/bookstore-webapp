@@ -5,7 +5,7 @@ public class ItemModel {
 	private int id;
 	private String name;
 	private String city;
-	private int price;
+	private float price;
 	private int count;
 	private String picture;
 	
@@ -27,10 +27,10 @@ public class ItemModel {
 	public void setCity(String city) {
 		this.city = city;
 	}
-	public int getPrice() {
+	public float getPrice() {
 		return price;
 	}
-	public void setPrice(int d) {
+	public void setPrice(float d) {
 		this.price = d;
 	}
 	public int getCount() {
