@@ -49,17 +49,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <div id="bodydiv">
   <img src="images/booklogo.jpg" width="180" height="120" border="5" style="border-color:#D3D3D3 gray gray #D3D3D3">
   <div class="logo">
-  <center><form action="Controller" method="post"><input type="hidden" name="action" value="search"
-  /><input style="width:80px;height:40px;margin-top:0;border:0;margin-right:0" type="button" value="查找书籍"
-  /><input style="width:700px;height:40px;line-height:40px;font-weight: 600;" name="bookname" type="text"
-  <%if(request.getAttribute("nosearch")==null){ %>value="输入书籍名称"
-  <%}else if(request.getAttribute("nosearch").equals("true")){ %>value="搜索不到此书籍，请重新输入"<%} %> onfocus="this.value=''"
-  /><input id="button1" style="width:40px" type="submit" value="  "/>
-  </form></center>
+  <center>
+  <form id="formId" action="Service" method="post" onkeydown="if(event.keyCode==13)return false;">
+  <input type="hidden" name="action" value="search"
+  /><input style="width:80px;height:40px;margin-top:0;border:0;margin-right:0" type="button" value="书籍名称"
+  /><input id="input_text" style="width:700px;height:40px;line-height:40px;font-weight: 600;" name="bookname" type="text" 
+  /><input id="button1" style="width:40px" onclick="ononsearch()" type="button" value="  " />
+  </form>
+  </center>
   </div>
   
   <div class="log">
-  &nbsp;&nbsp;<%if(session.getAttribute("user")==null){ %><a href="login.jsp"><b>&nbsp;&nbsp;登录</b></a>&nbsp;&nbsp;&nbsp;<a href="register.jsp"><b>快速注册</b></a><%}else{ %><a href="cart.jsp">我的购物车</a>&nbsp;&nbsp;<a href="userCenter.jsp">个人中心</a><%} %>
+  &nbsp;&nbsp;<%if(session.getAttribute("user")==null){ %><a href="login.jsp"><b>&nbsp;&nbsp;登录</b></a>&nbsp;&nbsp;&nbsp;<a href="register.jsp"><b>快速注册</b></a><%}else{ %><a href="Service?action=cart">我的购物车</a>&nbsp;&nbsp;<a href="userCenter.jsp">个人中心</a><%} %>
   </div>
   <center>
     <h1>图书推荐</h1>
@@ -92,7 +93,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	     			<a href="details.jsp?id=<%=item.getId()%>">
 	     			<img src="images/<%=item.getPicture() %>" width="210" height="180" border="0">
 	     			</a>
-	     			<h4>&nbsp;&nbsp;&nbsp;&nbsp;<%=item.getName() %></h4>
+	     			<h4><a href="details.jsp?id=<%=item.getId()%>">&nbsp;&nbsp;&nbsp;&nbsp;<%=item.getName() %></a></h4>
 	     			<P style="color:red;">&nbsp;&nbsp;&nbsp;&nbsp;¥:&nbsp;<%=priceDF.format(item.getPrice()) %></P>
 	     			<p>&nbsp;&nbsp;&nbsp;&nbsp;出版社：<%=item.getCity() %></p>
 	     			<br>
@@ -118,7 +119,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	     			<a href="details.jsp?id=<%=item.getId()%>">
 	     			<img src="images/<%=item.getPicture() %>" width="210" height="180" border="0">
 	     			</a>
-	     			<h4>&nbsp;&nbsp;&nbsp;&nbsp;<%=item.getName() %></h4>
+	     			<h4><a href="details.jsp?id=<%=item.getId()%>">&nbsp;&nbsp;&nbsp;&nbsp;<%=item.getName() %></a></h4>
 	     			<P style="color:red;">&nbsp;&nbsp;&nbsp;&nbsp;¥:&nbsp;<%=priceDF.format(item.getPrice()) %></P>
 	     			<p>&nbsp;&nbsp;&nbsp;&nbsp;出版社：<%=item.getCity() %></p>
 	     			<br>
@@ -144,7 +145,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	     			<a href="details.jsp?id=<%=item.getId()%>">
 	     			<img src="images/<%=item.getPicture() %>" width="210" height="180" border="0">
 	     			</a>
-	     			<h4>&nbsp;&nbsp;&nbsp;&nbsp;<%=item.getName() %></h4>
+	     			<h4><a href="details.jsp?id=<%=item.getId()%>">&nbsp;&nbsp;&nbsp;&nbsp;<%=item.getName() %></a></h4>
 	     			<P style="color:red;">&nbsp;&nbsp;&nbsp;&nbsp;¥:&nbsp;<%=priceDF.format(item.getPrice()) %></P>
 	     			<p>&nbsp;&nbsp;&nbsp;&nbsp;出版社：<%=item.getCity() %></p>
 	     			<br>
@@ -164,31 +165,58 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      <center>版权所有 © 2017-，书虫图书旗下公司</center>
      &nbsp;&nbsp;&nbsp;&nbsp;
   </div>
+  <script src="js/jquery-3.3.1.min.js" type="text/javascript"></script>
+  <script type="text/javascript">
+	  document.getElementById("class1").onclick = function(){
+	  	console.log("1");
+	  	$("#class2, #class3").attr("style","color:blue;");
+	  	$("#class1").attr("style","color:black;");
+	  	$("#table2, #table3").fadeOut(300);
+	  	$("#table1").fadeIn(500);
+	  };
+	  document.getElementById("class2").onclick = function(){
+	  	console.log("2");
+	  	$("#class1, #class3").attr("style","color:blue;");
+	  	$("#class2").attr("style","color:black;");
+	  	$("#table1, #table3").fadeOut(300);
+	  	$("#table2").fadeIn(500);
+	  };
+	  document.getElementById("class3").onclick = function(){
+	  	console.log("3");
+	  	$("#class1,#class2").attr("style","color:blue;");
+	  	$("#class3").attr("style","color:black;");
+	  	$("#table1,#table2").fadeOut(300);
+	  	$("#table3").fadeIn(500);
+	  };
   
-  <script src="js/jquery-1.10.2.js" type="text/javascript"></script>
-  <script>
-  //console.log("123");
-  document.getElementById("class1").onclick = function(){
-  	console.log("1");
-  	$("#class2, #class3").attr("style","color:blue;");
-  	$("#class1").attr("style","color:black;");
-  	$("#table2, #table3").fadeOut(300);
-  	$("#table1").fadeIn(500);
-  };
-  document.getElementById("class2").onclick = function(){
-  	console.log("2");
-  	$("#class1, #class3").attr("style","color:blue;");
-  	$("#class2").attr("style","color:black;");
-  	$("#table1, #table3").fadeOut(300);
-  	$("#table2").fadeIn(500);
-  };
-  document.getElementById("class3").onclick = function(){
-  	console.log("3");
-  	$("#class1,#class2").attr("style","color:blue;");
-  	$("#class3").attr("style","color:black;");
-  	$("#table1,#table2").fadeOut(300);
-  	$("#table3").fadeIn(500);
-  };
+    $('#input_text').keydown(function(event){
+    	if(event.keyCode == 13){
+    		ononsearch();
+    	}
+    });
+    
+    function ononsearch(){
+        $.ajax({  
+                cache: true,  
+                type:"POST",  
+                url:"Service",  
+                data:$('#formId').serialize(),  
+                dataType:"json",  
+                async: false,  
+                error: function(request) {  
+                    alert("Connection error:"+request.error);  
+                },  
+                success: function(data) {
+                	if(data.id!=null){
+                		window.location.replace("details.jsp?id=" + data.id);
+                	}else{
+                		alert("没有找到此书!");
+                	}
+                	//var parsedJson = jQuery.parseJSON(data); 
+                	//console.log(parsedJson.id); 
+                }  
+            });  
+    }
   </script>
   </body>
 </html>

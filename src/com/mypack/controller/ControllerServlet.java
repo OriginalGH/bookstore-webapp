@@ -28,30 +28,30 @@ public class ControllerServlet extends HttpServlet {
 			throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8"); // 设置对客户端请求进行重新编码所使用的编码.
 		response.setCharacterEncoding("utf-8"); // 指定对服务器响应进行重新编码所使用的编码。
+		// 设置响应头的ContentType
+		response.setContentType("text/html;charset=utf-8");
 
-		response.setContentType("text/html");
 //		PrintWriter out = response.getWriter();
-//
-//		System.out.println(this.con); // 输出数据库连接信息
 
 		String action = request.getParameter("action");
-		UserModel model = new UserModel();
+		UserModel userModel = new UserModel();
 		ItemsDAO itemsDao = new ItemsDAO();
-
+		
+		// 登录请求
 		if (action.equals("login")) {
-			model.setUsername(request.getParameter("username"));
-			model.setPassword(request.getParameter("password"));
-			UserDAO userDAO = new UserDAO(con, model);
+			userModel.setUsername(request.getParameter("username"));
+			userModel.setPassword(request.getParameter("password"));
+			UserDAO userDAO = new UserDAO(con, userModel);
 			int i = 0;
 			i = userDAO.loginUser();
 
 			if (i > 0) {
+				HttpSession session = request.getSession();
 				UserModel us = new UserModel();
 				us = userDAO.getUser();
 
 				String username = request.getParameter("username");
 				request.setAttribute("username", username);
-				HttpSession session = request.getSession();
 				session.setAttribute("user", username);
 				session.setAttribute("userid", us.getId());
 				session.setAttribute("phone", us.getPhone());
@@ -63,19 +63,19 @@ public class ControllerServlet extends HttpServlet {
 				request.getRequestDispatcher("/login.jsp").include(request,
 						response);
 			}
-
+		// 登录成功,转到主页
 		} else if (action.equals("welcome")) {
 			request.getRequestDispatcher("/index.jsp").forward(request,
 					response);
-
+		// 注册成功，转到登录
 		} else if (action.equals("successful")) {
 			request.getRequestDispatcher("/login.jsp").forward(request,
 					response);
-
+		// 进入注册页面
 		} else if (action.equals("register")) {
 			request.getRequestDispatcher("/register.jsp").forward(request,
 					response);
-
+		// 退出登录
 		} else if (action.equals("quit")) {
 			HttpSession session = request.getSession();
 			session.removeAttribute("user");
@@ -83,29 +83,29 @@ public class ControllerServlet extends HttpServlet {
 			session.removeAttribute("phone");
 			request.getRequestDispatcher("/welcome.jsp").forward(request,
 					response);
-
+		// 切换用户
 		} else if (action.equals("changeuser")) {
 			request.getRequestDispatcher("/login.jsp").forward(request,
 					response);
-
+		// 搜索
 		} else if (action.equals("search")) {
 			int a = itemsDao.getItemsByName(request.getParameter("bookname"));
-			if (a != 0) {
+			System.out.println((request.getParameter("bookname")));
+			if (a != -1) {
 				request.getRequestDispatcher("/details.jsp?id=" + a).forward(
 						request, response);
-			}
-			if (a == 0) {
+			}else{
 				request.setAttribute("nosearch", "true");
 				request.getRequestDispatcher("/index.jsp").include(request,
 						response);
 			}
-
+		// 注册用户
 		} else if (action.equals("registerUser")) {
-			model.setPhone(request.getParameter("phone"));
-			model.setUsername(request.getParameter("username"));
-			model.setPassword(request.getParameter("password"));
+			userModel.setPhone(request.getParameter("phone"));
+			userModel.setUsername(request.getParameter("username"));
+			userModel.setPassword(request.getParameter("password"));
 
-			UserDAO userDAO = new UserDAO(con, model);
+			UserDAO userDAO = new UserDAO(con, userModel);
 			int n = 0;
 			n = userDAO.insertUser();
 
@@ -113,13 +113,11 @@ public class ControllerServlet extends HttpServlet {
 				// out.write("Registration Successful!!!");
 				request.getRequestDispatcher("/successful.jsp").include(
 						request, response);
-
 			} else {
 				// out.println("Registration false!!! UserName is null.");
 				request.setAttribute("registerfalse", "true");
 				request.getRequestDispatcher("/register.jsp").include(request,
 						response);
-
 			}
 		}
 
@@ -131,8 +129,7 @@ public class ControllerServlet extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
 
-//		response.setContentType("text/html");
-//		PrintWriter out = response.getWriter();
+		response.setContentType("text/html;charset=utf-8");
 		doGet(request, response);
 
 	}

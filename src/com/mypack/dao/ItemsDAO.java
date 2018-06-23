@@ -95,12 +95,12 @@ public class ItemsDAO {
 			if (rs.next()) {
 				return rs.getInt("id");
 			} else {
-				return 0;
+				return -1;
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			return 0;
+			return -1;
 		} finally {
 			C3P0Inner.realeaseResource(rs, ps, con);
 		}

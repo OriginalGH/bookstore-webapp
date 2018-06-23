@@ -7,6 +7,7 @@
 
 ## 相关技术  
 **jsp**  
+**Ajax**
 **servlet**  
 **javabean**  
 

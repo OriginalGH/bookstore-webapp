@@ -51,20 +51,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <div id="bodydiv">
   <img src="images/booklogo.jpg" width="180" height="120" border="5" style="border-color:#D3D3D3 gray gray #D3D3D3">
   <div class="logo">
-  <center><form action="Controller" method="post"><input type="hidden" name="action" value="search"/><input 
-  style="width:80px;height:40px;margin-top:0;border:0;margin-right:0" type="submit" value="查找书籍"><input 
-  style="width:700px;height:40px;line-height:40px;font-weight: 600;" name="bookname" type="text"
-  <%if(request.getAttribute("nosearch")==null){ %>value="输入书籍名称"
-  <%}else if(request.getAttribute("nosearch").equals("true")){ %>value="搜索不到此书籍，请重新输入"<%} %> onfocus="this.value=''"
-  ><input id="button1" type="submit" value="  ">
-  </form></center>
+  <center>
+  <form id="formId" action="Service" method="post" onkeydown="if(event.keyCode==13)return false;">
+  <input style="width:80px;height:40px;margin-top:0;border:0;margin-right:0" type="button" value="书籍名称" 
+  /><input id="input_text" style="width:700px;height:40px;line-height:40px;font-weight: 600;" name="bookname" type="text" 
+  /><input type="hidden" name="action" value="search" 
+  /><input id="button1" type="button" onclick="ononsearch()" value="  " />
+  </form>
+  </center>
   </div>
   
   <div class="log">
   <%if(session.getAttribute("user")==null){ %>
   <a href="login.jsp">登录</a>&nbsp;&nbsp;<a href="register.jsp">快速注册</a>
   <%}else{ %>
-  <a href="cart.jsp">我的购物车</a>&nbsp;&nbsp;<a href="userCenter.jsp">个人中心</a>
+  <a href="Service?action=cart">我的购物车</a>&nbsp;&nbsp;<a href="userCenter.jsp">个人中心</a>
   <%} %>
   </div>
   <center>
@@ -101,7 +102,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      			&nbsp;<br>
      			<b>出版社：<%=item.getCity() %></b><br>
      			&nbsp;<br>
-     			<a <%if(session.getAttribute("user")!=null){ %>onclick="alert('加入购物车成功！');"<%}else if(session.getAttribute("user")==null){ %>onclick="alert('请先登录账户！');"<%} %>><input name="" type="button" value="加入购物车"></a></td>
+     			<form id="formAddGoods" action="Service" method="post" >
+     				<input type="hidden" name="id" value="<%=item.getId() %>" />
+     				<input type="hidden" name="action" value="addgoods" />
+     				<input type="button" name="" value="加入购物车" onclick="addgoods()" />
+     			</form>
+     			</td>
      		</tr>
      		
      		
@@ -141,9 +147,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      		
      		<%
      			String list="";
-     			
      			Cookie[] cookies = request.getCookies();//获得cookie集合
-     			
      			if(cookies!=null&&cookies.length>0)
      			{
 	     			for(Cookie c:cookies)
@@ -151,16 +155,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		     			if(c.getName().equals("ListViewCookie"))
 		     			{
 		     				list = c.getValue();
-		     					
 		     			}
 		     		}
 	     		}
-	     		
      			list += request.getParameter("id") + ",";
-     			
      			String []arr = list.split(",");
      			if(arr!=null&&arr.length>0){
-     			
      				if(arr.length>=1000){	//超过1000条清零
      					list="";
      				}
@@ -199,12 +199,58 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      &nbsp;&nbsp;&nbsp;&nbsp;
      <center>版权所有 © 2017-，书虫图书旗下公司</center>
      &nbsp;&nbsp;&nbsp;&nbsp;
-     <!-- 
-     <script src="js/jquery-1.10.2.js" type="text/javascript"></script>
-     <script type="text/javascript">
-     </script>
-      -->
       
   </div>
+  
+  <script src="js/jquery-1.10.2.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    function addgoods(){
+    	$.ajax({  
+                cache: true,  
+                type:"POST",  
+                url:"Service",  
+                data:$('#formAddGoods').serialize(),  
+                dataType:"json",  
+                async: false,  
+                error: function(request) {  
+                    alert("Connection error:"+request.error);  
+                },  
+                success: function(data) { 
+                	if(data.ok!=null){ 
+                		alert("加入购物车成功!"); 
+                	}else{
+                		alert("请先登录账户！"); 
+                	}
+                }  
+            });  
+    }
+    $('#input_text').keydown(function(event){
+    	if(event.keyCode == 13){
+    		ononsearch();
+    	}
+    });
+    function ononsearch(){
+        $.ajax({  
+                cache: true,  
+                type:"POST",  
+                url:"Service",  
+                data:$('#formId').serialize(),  
+                dataType:"json",  
+                async: false,  
+                error: function(request) {  
+                    alert("Connection error:"+request.error);  
+                },  
+                success: function(data) {
+                	if(data.id!=null){
+                		window.location.replace("details.jsp?id=" + data.id);
+                	}else{
+                		alert("sorry,没有找到此书!");
+                	}
+                	//var parsedJson = jQuery.parseJSON(data); 
+                	//console.log(parsedJson.id); 
+                }  
+            });  
+    }
+  </script>
   </body>
 </html>
