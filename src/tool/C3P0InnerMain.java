@@ -8,18 +8,7 @@ import java.sql.SQLException;
 // C3P0连接测试类
 public class C3P0InnerMain {
 
-	public PreparedStatement setStatement(Connection conn, String sql) {
-		PreparedStatement ps = null;
-		try {
-			ps = conn.prepareStatement(sql);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return ps;
-	}
-
-	public PreparedStatement setParameter(PreparedStatement ps,
-			Object... values) {
+	public PreparedStatement setParameter(PreparedStatement ps, Object... values) {
 		try {
 			if (null != values) {
 				for (int i = 1; i <= values.length; i++) {
@@ -43,10 +32,13 @@ public class C3P0InnerMain {
 			
 			C3P0InnerMain c3P0InnerMain = new C3P0InnerMain();
 
-			String sql = "SELECT * FROM items";
+			String sql = "SELECT * FROM items where id=? and name=?";
 
-			ps = c3P0InnerMain.setStatement(conn, sql);
-			// ps = c3P0InnerMain.setParameter(ps, new Object[]{20,"tom"});	
+			ps = conn.prepareStatement(sql);
+			
+			//ps = c3P0InnerMain.setParameter(ps, new Object[]{8,"白夜行"});
+			ps = c3P0InnerMain.setParameter(ps, 8, "白夜行");	
+
 
 			rs = ps.executeQuery();
 
@@ -56,7 +48,7 @@ public class C3P0InnerMain {
 				System.out.println("ID: " + id + ", NAME:" + name);
 			}
 			C3P0Inner.getStatement();
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			// 释放资源

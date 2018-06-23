@@ -19,7 +19,7 @@ public class C3P0Inner {
 
 			ds.setDriverClass("com.mysql.jdbc.Driver");// 设置连接池连接数据库所需的驱动
 
-			ds.setJdbcUrl("jdbc:mysql://localhost:3306/shopping");// 设置连接数据库的URL
+			ds.setJdbcUrl("jdbc:mysql://localhost:3306/shopping?useUnicode=true&characterEncoding=utf8");// 设置连接数据库的URL
 
 			ds.setUser("root"); // 设置连接数据库的用户名
 
